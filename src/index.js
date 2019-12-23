@@ -1,36 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import { Route, NavLink, BrowserRouter as Router, Switch } from 'react-router-dom'
-import App from './view/page/App'
-import Users from './view/page/Users'
-import Contact from './view/page/Contact'
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
+
 import Notfound from './view/page/Notfound'
+import SignIn from './view/page/Signin'
+import SignUp from './view/page/Signup'
+import Home from './view/page/Home'
+
+import 'bootstrap/dist/css/bootstrap.css' 
 
 const routing = (
     <Router>
         <div>
-            <ul>
-                <li>
-                    <NavLink exact activeClassName="active" to="/">
-                        Home
-          </NavLink>
-                </li>
-                <li>
-                    <NavLink activeClassName="active" to="/users">
-                        Users
-          </NavLink>
-                </li>
-                <li>
-                    <NavLink activeClassName="active" to="/contact">
-                        Contact
-          </NavLink>
-                </li>
-            </ul>
             <Switch>
-                <Route exact path="/" component={App} />
-                <Route path="/users/:id" component={Users} />
-                <Route path="/contact" component={Contact} />
+                <Route exact path="/" component={SignIn} />
+                <Route path="/signup" component={SignUp} />
+                <Route path="/home" component={Home} />
                 <Route component={Notfound} />
             </Switch>
         </div>
