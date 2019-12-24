@@ -10,6 +10,7 @@ import Home from './view/page/Home'
 
 import 'bootstrap/dist/css/bootstrap.css' 
 
+
 const routing = (
     <Router>
         <div>
@@ -17,6 +18,8 @@ const routing = (
                 <Route exact path="/" component={SignIn} />
                 <Route path="/signup" component={SignUp} />
                 <Route path="/home" component={Home} />
+
+
                 <Route component={Notfound} />
             </Switch>
         </div>

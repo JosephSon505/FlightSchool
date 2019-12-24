@@ -1,6 +1,6 @@
 import React from 'react'
 import '../css/App.css'
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import fire from '../../config/fire'
 
 class SignIn extends React.Component {
@@ -13,7 +13,9 @@ class SignIn extends React.Component {
 
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            alert: '',
+            isOpen: false
         }
     }
 
@@ -22,7 +24,11 @@ class SignIn extends React.Component {
         fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((u)=>{ 
             this.props.history.push("/home")
         }).catch((error) => {
-            console.log(error);
+            this.setState({
+                alert: "Invalid email or password. Please try again",
+                isOpen: true
+            });
+            // console.log(error);
         });
     }
 
@@ -36,7 +42,13 @@ class SignIn extends React.Component {
                 <h1 className="text-center" >Flight School</h1>
                 <h2 className="text-center" >Log In</h2>
 
-                <FormGroup>
+                <div className="mt-4">
+                <Alert color="danger" isOpen={this.state.isOpen}>
+                    {this.state.alert}
+                </Alert>
+                </div>
+
+                <FormGroup className="mt-4">
                     <Label>Email</Label>
                     <Input name="email" type="email" placeholder="Email" onChange={this.handleChange}/>
                 </FormGroup>

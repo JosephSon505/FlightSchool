@@ -1,7 +1,7 @@
 import React from 'react'
 import '../css/App.css'
 import fire from '../../config/fire'
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 
 class SignUp extends React.Component {
 
@@ -14,7 +14,9 @@ class SignUp extends React.Component {
         this.state = {
             name: '',
             email: '',
-            password: ''
+            password: '',
+            isOpen: false,
+            error: ''
         }
     }
 
@@ -23,6 +25,12 @@ class SignUp extends React.Component {
             <Form className="login-form" onSubmit = {this.signup}>
                 <h1 className="text-center" >Flight School</h1>
                 <h2 className="text-center" >Sign Up</h2>
+
+                <div className="mt-4">
+                <Alert color="danger" isOpen={this.state.isOpen}>
+                    {this.state.error}
+                </Alert>
+                </div>
 
                 <FormGroup>
                     <Label>Name</Label>
@@ -56,6 +64,21 @@ class SignUp extends React.Component {
         }).then((u) => { 
             console.log(u) 
         }).catch((error) => {
+            let message = '';
+
+            if(error.message === "The email address is already in use by another account.") {
+                message = "This email address is already in use. Please enter a different email address.";
+            } else if (error.message === "The email address is badly formatted.") {
+                message = "This is an invalid email address. Please check the format of the email address.";
+            } else {
+                message = "Error. Please try again.";
+            }
+
+            this.setState({
+                error: message,
+                isOpen: true
+            })
+
             console.log(error);
         })
     }
