@@ -27,9 +27,7 @@ class SignUp extends React.Component {
                 <h2 className="text-center" >Sign Up</h2>
 
                 <div className="mt-4">
-                <Alert color="danger" isOpen={this.state.isOpen}>
-                    {this.state.error}
-                </Alert>
+                    <Alert color="danger" isOpen={this.state.isOpen}>{this.state.error}</Alert>
                 </div>
 
                 <FormGroup>
@@ -47,10 +45,10 @@ class SignUp extends React.Component {
                     <Input name="password" type="password" placeholder="password" onChange={this.handleChange} />
                 </FormGroup>
 
-                <Button className="btn-lrg btn-dark btn-block mt-3" onClick = {this.signup}>Sign Up</Button>
+                <div className="mt-5">
+                    <Button className="btn-lrg btn-dark btn-block mt-3" onClick = {this.signup}>Sign Up</Button>
 
-                <div className="text-center mt-3">
-                    <a href="/">Cancel</a>
+                    <div className="text-center mt-3"> <a href="/">Cancel</a> </div>
                 </div>
             </Form>
         )
@@ -79,7 +77,7 @@ class SignUp extends React.Component {
                 isOpen: true
             })
 
-            console.log(error);
+            console.error(error);
         })
     }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from 'reactstrap'
+import { Table, Jumbotron, Container } from 'reactstrap'
 import '../css/Home.css'
 
 class RPE extends React.Component {
@@ -19,7 +19,7 @@ class RPE extends React.Component {
         let yAxis = new Array(9);
 
         // create array of 13 for each index of y axis
-        for(let i = 0; i < yAxis.length; i++) {
+        for (let i = 0; i < yAxis.length; i++) {
             yAxis[i] = new Array(13);
         }
 
@@ -28,14 +28,14 @@ class RPE extends React.Component {
 
         // populate rpe
         let rpe = 10.0;
-        for(let i = 1; i < yAxis.length; i++) {
+        for (let i = 1; i < yAxis.length; i++) {
             yAxis[i][0] = rpe;
-            rpe = rpe -.5
+            rpe = rpe - .5
         }
 
         // populate rep count
         let reps = 1;
-        for(let i = 1; i < yAxis[0].length; i++) {
+        for (let i = 1; i < yAxis[0].length; i++) {
             yAxis[0][i] = reps;
             reps = reps + 1;
         }
@@ -64,11 +64,11 @@ class RPE extends React.Component {
         yAxis[8][12] = 58.6;
 
         // populate rest of 2D array
-        for(let i = 2; i < yAxis.length; i++) {
-            for(let j = 1; j < 12; j++) {
+        for (let i = 2; i < yAxis.length; i++) {
+            for (let j = 1; j < 12; j++) {
 
-                let above = parseFloat(yAxis[i-1][j]);
-                let aboveRight = parseFloat(yAxis[i-1][j+1]);
+                let above = parseFloat(yAxis[i - 1][j]);
+                let aboveRight = parseFloat(yAxis[i - 1][j + 1]);
 
                 let value = ((above - aboveRight) / 2.0) + aboveRight
 
@@ -86,32 +86,30 @@ class RPE extends React.Component {
             </div>
 
             <Table>
-                <tbody>
-                        {this.returnBody(yAxis)}
-                </tbody>
+                <tbody>{this.returnBody(yAxis)}</tbody>
             </Table>
 
             <div className="mt-3 text-center">
-                <h2 className="text-center">
-                    Table Guide
-                </h2>
+                <Jumbotron fluid>
+                    <Container fluid>
+                        <h2 className="text-center">Table Guide</h2>
 
-                The top row displays the number of reps <br />
-                The First column displays the RPE <br />
-                Each number represents the percentage of your total
+                        <p className="mt-4">
+                            The top row displays the number of reps <br />
+                            The First column displays the RPE <br />
+                            Each number represents the percentage of your total
+                        </p>
+                    </Container>
+                </Jumbotron>
             </div>
-
-            <div className="empty-div-100px"></div>
         </div>
     }
 
     returnBody(yAxis) {
         return yAxis.map((row) => {
-
             const array = row;
-
-            return(
-                <tr key = {row}>
+            return (
+                <tr key={row}>
                     <td>{array[0]}</td>
                     <td>{array[1]}</td>
                     <td>{array[2]}</td>
@@ -127,7 +125,6 @@ class RPE extends React.Component {
                     <td>{array[12]}</td>
                 </tr>
             )
-
         });
     }
 }

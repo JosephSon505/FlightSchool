@@ -1,7 +1,7 @@
 import React from 'react'
 import '../css/App.css'
-import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import fire from '../../config/fire'
+import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 
 class SignIn extends React.Component {
 
@@ -28,7 +28,7 @@ class SignIn extends React.Component {
                 alert: "Invalid email or password. Please try again",
                 isOpen: true
             });
-            // console.log(error);
+            console.error(error);
         });
     }
 
@@ -43,9 +43,7 @@ class SignIn extends React.Component {
                 <h2 className="text-center" >Log In</h2>
 
                 <div className="mt-4">
-                <Alert color="danger" isOpen={this.state.isOpen}>
-                    {this.state.alert}
-                </Alert>
+                    <Alert color="danger" isOpen={this.state.isOpen}>{this.state.alert}</Alert>
                 </div>
 
                 <FormGroup className="mt-4">
@@ -58,10 +56,11 @@ class SignIn extends React.Component {
                     <Input name="password" type="password" placeholder="password" onChange={this.handleChange}/>
                 </FormGroup>
 
-                <Button className="btn-lrg btn-dark btn-block mt-4" onClick = {this.login}>Log In</Button>
 
-                <div className="text-center mt-3">
-                    <a href="/signup">Sign Up</a>
+                <div className="mt-5">
+                    <Button className="btn-lrg btn-dark btn-block mt-4" onClick = {this.login}>Log In</Button>
+
+                    <div className="text-center mt-3"> <a href="/signup">Sign Up</a> </div>
                 </div>
             </Form>
         )

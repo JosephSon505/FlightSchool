@@ -19,7 +19,6 @@ const routing = (
                 <Route path="/signup" component={SignUp} />
                 <Route path="/home" component={Home} />
 
-
                 <Route component={Notfound} />
             </Switch>
         </div>

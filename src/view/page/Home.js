@@ -46,29 +46,17 @@ class Home extends React.Component {
                 <NavbarBrand href="/home">Flight School</NavbarBrand>
 
                 <Nav className="ml-auto" navbar>
-                    <NavItem>
-                        <NavLink href="/guide" className="mr-5">Guide</NavLink>
-                    </NavItem>
+                    <NavItem> <NavLink href="/guide" className="mr-5">Guide</NavLink> </NavItem>
 
-                    <NavItem>
-                        <NavLink href="/about" className="mr-5">About</NavLink>
-                    </NavItem>
+                    <NavItem> <NavLink href="/about" className="mr-5">About</NavLink> </NavItem>
 
                     <UncontrolledDropdown nav inNavbar>
-                        <DropdownToggle nav caret>
-                            Account
-                        </DropdownToggle>
+                        <DropdownToggle nav caret>Account</DropdownToggle>
 
                         <DropdownMenu right>
-                            <DropdownItem>
-                            Account Details
-                            </DropdownItem>
-
+                            <DropdownItem>Account Details</DropdownItem>
                             <DropdownItem divider />
-
-                            <DropdownItem onClick={ this.logout }>
-                            Logout
-                            </DropdownItem>
+                            <DropdownItem onClick={ this.logout }>Logout</DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
                 </Nav>
@@ -108,21 +96,10 @@ class Home extends React.Component {
                 </Nav>
 
                 <TabContent activeTab={this.state.tab}>
-                    <TabPane tabId="welcome">
-                        <Welcome />
-                    </TabPane>
-
-                    <TabPane tabId="blocks">
-                        <Blocks />
-                    </TabPane>
-
-                    <TabPane tabId="RPE">
-                        <RPE />
-                    </TabPane>
-
-                    <TabPane tabId="team">
-                        <Team />
-                    </TabPane>
+                    <TabPane tabId="welcome">   <Welcome /> </TabPane>
+                    <TabPane tabId="blocks">    <Blocks />  </TabPane>
+                    <TabPane tabId="RPE">       <RPE />     </TabPane>
+                    <TabPane tabId="team">      <Team />        </TabPane>
                 </TabContent>
             </div>
         )
