@@ -8,8 +8,6 @@ class Blocks extends React.Component {
             <div>Blocks go here mother fucker</div>
         )
     }
-
-
 }
 
 export default Blocks
