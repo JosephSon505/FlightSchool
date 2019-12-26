@@ -6,7 +6,6 @@ class Blocks extends React.Component {
     render() {
         return (
             <div>Blocks go here mother fucker</div>
-
         )
     }
 
