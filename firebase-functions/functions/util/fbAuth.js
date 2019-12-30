@@ -20,4 +20,4 @@ module.exports = (req, res, next) => {
         console.error('Error while verifying token', error);
         return res.status(403).json(error);
     });
-}
+};

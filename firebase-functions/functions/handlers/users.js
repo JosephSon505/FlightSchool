@@ -1,3 +1,4 @@
+// initialize 
 const { db, admin } = require('../util/admin');
 const config = require('../util/config');
 const firebase = require('firebase');
@@ -5,8 +6,8 @@ firebase.initializeApp(config);
 
 const { validateSignupData, validateLoginData } = require('../util/validation');
 
+// get all users from database in the order of first names
 exports.getAllUsers = (req, res) => {
-    // get all users from database in the order of first names
     db.collection('Users').orderBy('firstName').get().then((data) => {
         let users = [];
         data.forEach((doc) => {
@@ -24,6 +25,7 @@ exports.getAllUsers = (req, res) => {
     });
 };
 
+// sign up new user to database
 exports.signup = (req, res) => {
     // get new user credentials
     const newUser = {
@@ -38,6 +40,9 @@ exports.signup = (req, res) => {
     // make sure user fields are valid before proceeding; if not return error
     const { valid, errors } = validateSignupData(newUser);
     if(!valid) return res.status(400).json({ errors });
+
+    // create default profile picture
+    const noImg = 'no-img.png';
 
     let token, userID;
     db.doc(`/Users/${newUser.handle}`).get().then(doc => {
@@ -58,6 +63,7 @@ exports.signup = (req, res) => {
             email: newUser.email,
             firstName: newUser.firstName,
             lastName: newUser.lastName,
+            imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
             userId: userID
         };
 
@@ -76,6 +82,7 @@ exports.signup = (req, res) => {
     });
 };
 
+// log in function with email and password
 exports.login = (req, res) => {
     // get user credentials from the body
     const user = {
@@ -102,24 +109,22 @@ exports.login = (req, res) => {
     });
 };
 
+// upload profile picture for user
 exports.uploadImage = (req, res) => {
+    // initialization
     const BusBoy = require('busboy');
     const path = require('path');
     const os = require('os');
     const fs = require('fs');
     const busboy = new BusBoy({ headers: req.headers });
 
+    // variables needed later
     let imageFileName;
     let imageToBeUploaded = {};
 
     // create file
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
-
-        console.log(fieldname);
-        console.log(filename);
-        console.log(mimetype);
-
-        // extract file type of image
+        // extract file type of image and give it a name 
         const imageExt = filename.split('.')[filename.split('.').length - 1];
         imageFileName = `${Math.round(Math.random()*10000000000000)}.${imageExt}`;
 
@@ -129,7 +134,9 @@ exports.uploadImage = (req, res) => {
         file.pipe(fs.createWriteStream(filepath));
     });
 
-    // upload file 
+    let idToken;
+
+    // upload image file to database
     busboy.on('finish', () => {
         admin.storage().bucket().upload(imageToBeUploaded.filepath, {
             resumable: false,
@@ -138,9 +145,9 @@ exports.uploadImage = (req, res) => {
                     contentType: imageToBeUploaded.mimetype
                 }
             }
-        }).then(() => {
+        }).then(() => { 
             const imageURL = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`;
-            return db.doc(`/Users/${req.user.handle}`).update({ imageUrl: imageURL});
+            return db.doc(`/Users/pic`).update({ imageUrl: imageURL});
         }).then(() => {
             return res.json({ message: 'Image uploaded successfully'});
         }).catch(err => {
@@ -148,4 +155,6 @@ exports.uploadImage = (req, res) => {
             return res.status(500).json({ error: err.code });
         });
     });
+
+    busboy.end(req.rawBody);
 };
