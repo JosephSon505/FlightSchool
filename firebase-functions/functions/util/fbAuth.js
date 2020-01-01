@@ -2,8 +2,8 @@ const { admin, db } = require('./admin');
 
 module.exports = (req, res, next) => {
     let idToken;
-    if(req.headers.authorization && req.headers.authorization.startWith('Bearer ')) {
-        idToken = req.headers.authorization.split(' ')[1];
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        idToken = req.headers.authorization.split('Bearer ')[1];
     } else { 
         console.error("No token found: Cannot authenticate");
         return res.status(403).json({ error: 'Unauthorized' });

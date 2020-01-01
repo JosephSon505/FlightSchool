@@ -6,6 +6,7 @@ const isEmpty = (string) => {
 
 // Helper function: check to see if email is valid
 const isEmail = (email) => {
+    // reg ex expression for checking if input is an email
     const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (email.match(emailRegEx)) return true;
     else return false;
@@ -33,6 +34,7 @@ exports.validateSignupData = (data) => {
     };
 };
 
+// make sure that log in form is filled out
 exports.validateLoginData = (data) => {
     // error checking data submission
     let errors = {};
@@ -45,3 +47,12 @@ exports.validateLoginData = (data) => {
         valid: Object.keys(errors).length === 0 ? true : false
     };
 };
+
+// reduces request body for updating profile into separate sections
+exports.reduceUserDetails = (data) => {
+    // NOTE: can add more to body and update here
+    let userDetails = {};
+    if(!isEmpty(data.liftInstagram.trim())) userDetails.liftInstagram = data.liftInstagram;
+    if(!isEmpty(data.mainInstagram.trim())) userDetails.mainInstagram = data.mainInstagram;
+    return userDetails;
+}

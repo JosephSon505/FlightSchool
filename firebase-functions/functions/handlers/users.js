@@ -4,7 +4,7 @@ const config = require('../util/config');
 const firebase = require('firebase');
 firebase.initializeApp(config);
 
-const { validateSignupData, validateLoginData } = require('../util/validation');
+const { validateSignupData, validateLoginData, reduceUserDetails } = require('../util/validation');
 
 // get all users from database in the order of first names
 exports.getAllUsers = (req, res) => {
@@ -109,6 +109,29 @@ exports.login = (req, res) => {
     });
 };
 
+// Update user details
+exports.addUserDetails = (req, res) => {
+    let userDetails = reduceUserDetails(req.body);
+    db.doc(`/Users/${req.user.handle}`).update(userDetails).then(() => {
+        return res.json({ message: 'User details added successfully' });
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).json({ error: err.code });
+    });
+};
+
+// get the current user's details (logged in account)
+exports.getCurrentUser = (req, res) => {
+    let userData = {};
+    db.doc(`/Users/${req.user.handle}`).get().then(doc => {
+        if(doc.exists) userData.credentials = doc.data();
+        return res.json(userData);
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).json({ error: err.code });
+    });
+};
+
 // upload profile picture for user
 exports.uploadImage = (req, res) => {
     // initialization
@@ -134,8 +157,6 @@ exports.uploadImage = (req, res) => {
         file.pipe(fs.createWriteStream(filepath));
     });
 
-    let idToken;
-
     // upload image file to database
     busboy.on('finish', () => {
         admin.storage().bucket().upload(imageToBeUploaded.filepath, {
@@ -147,9 +168,9 @@ exports.uploadImage = (req, res) => {
             }
         }).then(() => { 
             const imageURL = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`;
-            return db.doc(`/Users/pic`).update({ imageUrl: imageURL});
+            return db.doc(`/Users/${req.user.handle}`).update({ imageUrl: imageURL});
         }).then(() => {
-            return res.json({ message: 'Image uploaded successfully'});
+            return res.json({ message: 'Image uploaded successfully' });
         }).catch(err => {
             console.error(err.code);
             return res.status(500).json({ error: err.code });
