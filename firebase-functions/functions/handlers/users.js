@@ -15,7 +15,11 @@ exports.getAllUsers = (req, res) => {
                 userID: doc.id,
                 firstName: doc.data().firstName,
                 lastName: doc.data().lastName,
-                email: doc.data().email
+                email: doc.data().email,
+                liftInstagram: doc.data().liftInstagram,
+                mainInstagram: doc.data().mainInstagram,
+                imageUrl: doc.data().imageUrl,
+                handle: doc.data().handle
             });
         });
         return res.json(users);
@@ -77,7 +81,7 @@ exports.signup = (req, res) => {
         if(err.code === 'auth/email-already-in-use') {
             return res.status(400).json({ email: 'Email already in use'});
         } else {
-            return res.status(500).json({ error: err.code });
+            return res.status(500).json({ general: 'Something went wrong. Please try again' });
         }
     });
 };
