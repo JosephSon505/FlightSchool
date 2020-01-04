@@ -49,10 +49,12 @@ exports.signup = (req, res) => {
     const noImg = 'no-img.png';
 
     let token, userID;
+
     db.doc(`/Users/${newUser.handle}`).get().then(doc => {
         // check to see if user handle is already created if not create account
         if(doc.exists) {
-            return res.status(400).json({ handle: "This handle is already taken" });
+            errors.handle = 'This handle is already taken';
+            return res.status(400).json({ errors });
         } else {
             // authentication create new account
             return firebase.auth().createUserWithEmailAndPassword(newUser.email, newUser.password);   
@@ -79,7 +81,8 @@ exports.signup = (req, res) => {
     }).catch(err => {
         console.error(`Error: ${err}`);
         if(err.code === 'auth/email-already-in-use') {
-            return res.status(400).json({ email: 'Email already in use'});
+            errors.email = 'Email already in use';
+            return res.status(400).json({ errors });
         } else {
             return res.status(500).json({ general: 'Something went wrong. Please try again' });
         }

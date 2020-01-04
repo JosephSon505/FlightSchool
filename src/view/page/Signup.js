@@ -1,90 +1,233 @@
 import React from 'react'
+// import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import PropTypes from 'prop-types';
+
+// Material UI Imports
+import withStyles from '@material-ui/core/styles/withStyles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+// Axios Import
+import axios from 'axios';
+
 import '../css/App.css'
-import fire from '../../config/fire'
-import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+
+const styles = {
+    form: {
+        textAlign: 'center'
+    },
+    pageTitle: {
+        margin: '20px auto 20px auto'
+    },
+    textField: {
+        margin: '8px auto 8px auto'
+    },
+    button: {
+        margin: '40px auto 0px auto',
+        position: 'relative'
+    },
+    customError: {
+        color: 'red',
+        fontSize: '0.8rem', 
+        marginTop: '20'
+    },
+    progress: {
+        position: 'absolute',
+    },
+    cancel: {
+        marginTop: '20px',
+        marginBottom: '50px'
+    }
+};
 
 class SignUp extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        this.signup = this.signup.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-
+    constructor() {
+        super();
         this.state = {
-            name: '',
             email: '',
             password: '',
-            isOpen: false,
-            error: ''
-        }
+            confirmPassword: '',
+            firstName: '',
+            lastName: '',
+            handle: '',
+            loading: false,
+            errors: {},
+            emailError: '',
+            passwordError: '',
+            confirmPasswordError: '',
+            firstNameError: '',
+            lastNameError: '',
+            handleError: ''
+        };
     }
 
     render() {
+        const { classes } = this.props;
+        const { errors, emailError, passwordError, confirmPasswordError, firstNameError, lastNameError, handleError, loading } = this.state;
+
         return (
-            <Form className="login-form" onSubmit = {this.signup}>
-                <h1 className="text-center" >Flight School</h1>
-                <h2 className="text-center" >Sign Up</h2>
-
-                <div className="mt-4">
-                    <Alert color="danger" isOpen={this.state.isOpen}>{this.state.error}</Alert>
-                </div>
-
-                <FormGroup>
-                    <Label>Name</Label>
-                    <Input name="name" type="text" placeholder="Name" onChange={this.handleChange} />
-                </FormGroup>
-
-                <FormGroup>
-                    <Label>Email</Label>
-                    <Input name="email" type="email" placeholder="Email" onChange={this.handleChange} />
-                </FormGroup>
-
-                <FormGroup>
-                    <Label>Password</Label>
-                    <Input name="password" type="password" placeholder="password" onChange={this.handleChange} />
-                </FormGroup>
-
-                <div className="mt-5">
-                    <Button className="btn-lrg btn-dark btn-block mt-3" onClick = {this.signup}>Sign Up</Button>
-
-                    <div className="text-center mt-3"> <a href="/">Cancel</a> </div>
-                </div>
-            </Form>
-        )
+            <Grid container className={classes.form}>
+                <Grid item sm/>
+                <Grid item sm>
+                    <Typography variant="h2" className={classes.pageTitle}>
+                        Flight School
+                    </Typography>
+                    <Typography variant="h4" className={classes.pageTitle}>
+                        Sign Up
+                    </Typography>
+                    <form noValidate onSubmit={this.handleSubmit} >
+                        <TextField 
+                            id='firstName' 
+                            name='firstName' 
+                            type='text' 
+                            label='First Name' 
+                            variant='outlined' 
+                            className={classes.textField} 
+                            helperText={firstNameError}
+                            error={firstNameError ? true : false}
+                            value={this.state.firstName} 
+                            onChange={this.handleChange} 
+                            fullWidth
+                        />
+                        <TextField 
+                            id='lastName' 
+                            name='lastName' 
+                            type='text' 
+                            label='Last Name' 
+                            variant='outlined' 
+                            className={classes.textField} 
+                            helperText={lastNameError}
+                            error={lastNameError ? true : false}
+                            value={this.state.lastName} 
+                            onChange={this.handleChange} 
+                            fullWidth
+                        />
+                        <TextField 
+                            id='email' 
+                            name='email' 
+                            type='email' 
+                            label='Email' 
+                            variant='outlined' 
+                            className={classes.textField} 
+                            helperText={emailError}
+                            error={emailError ? true : false}
+                            value={this.state.email} 
+                            onChange={this.handleChange} 
+                            fullWidth
+                        />
+                        <TextField 
+                            id='password' 
+                            name='password' 
+                            type='password' 
+                            label='Password'
+                            variant='outlined'  
+                            className={classes.textField} 
+                            helperText={passwordError}
+                            error={passwordError ? true : false}
+                            value={this.state.password} 
+                            onChange={this.handleChange} 
+                            fullWidth
+                        />
+                        <TextField 
+                            id='confirmPassword' 
+                            name='confirmPassword' 
+                            type='password' 
+                            label='Confirm Password'
+                            variant='outlined'  
+                            className={classes.textField} 
+                            helperText={confirmPasswordError}
+                            error={confirmPasswordError ? true : false}
+                            value={this.state.confirmPassword} 
+                            onChange={this.handleChange} 
+                            fullWidth
+                        />
+                        <TextField 
+                            id='handle' 
+                            name='handle' 
+                            type='text' 
+                            label='Handle' 
+                            variant='outlined' 
+                            className={classes.textField} 
+                            helperText={handleError}
+                            error={handleError ? true : false}
+                            value={this.state.handle} 
+                            onChange={this.handleChange} 
+                            fullWidth
+                        />
+                        {errors.general && (
+                            <Typography variant='body2' className={classes.customError}>
+                                {errors.general}
+                            </Typography>
+                        )}
+                        <Button type='submit'variant='contained' color='primary' className={classes.button} fullWidth disabled={loading}>
+                            Sign Up
+                            {loading && (
+                                <CircularProgress size={26} className={classes.progress} />
+                            )}
+                        </Button>
+                        <Button variant='contained' color='secondary' onClick={this.handleCancel} className={classes.cancel} fullWidth>
+                            Cancel
+                        </Button>
+                    </form>
+                </Grid>
+                <Grid item sm/>
+            </Grid>
+        );
     }
 
-    signup(e) {
-        e.preventDefault();
+    handleSubmit = (event) => {
+        event.preventDefault();
+        this.setState({
+            loading: true
+        });
 
-        fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then((u) => {
-            this.props.history.push("/")
-        }).then((u) => { 
-            console.log(u) 
-        }).catch((error) => {
-            let message = '';
+        const newUserData = {
+            email: this.state.email,
+            password: this.state.password,
+            confirmPassword: this.state.confirmPassword,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            handle: this.state.handle
+        };
 
-            if(error.message === "The email address is already in use by another account.") {
-                message = "This email address is already in use. Please enter a different email address.";
-            } else if (error.message === "The email address is badly formatted.") {
-                message = "This is an invalid email address. Please check the format of the email address.";
-            } else {
-                message = "Error. Please try again.";
-            }
-
+        axios.post('/signup', newUserData).then(res => {
+            localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
             this.setState({
-                error: message,
-                isOpen: true
-            })
-
-            console.error(error);
+                loading: false
+            });
+            this.props.history.push('/home');
+        }).catch(err => {
+            console.log(err.response.data)
+            this.setState({
+                errors: err.response.data,
+                emailError: err.response.data.errors ? err.response.data.errors.email : '',
+                passwordError: err.response.data.errors ? err.response.data.errors.password : '',
+                confirmPasswordError: err.response.data.errors ? err.response.data.errors.confirmPassword : '',
+                firstNameError: err.response.data.errors ? err.response.data.errors.firstName : '',
+                lastNameError: err.response.data.errors ? err.response.data.errors.lastName : '',
+                handleError: err.response.data.errors ? err.response.data.errors.handle : '',
+                loading: false
+            });
         })
     }
 
-    handleChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
+    handleChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
     }
 
+    handleCancel = (event) => {
+        this.props.history.push('/');
+    }
 }
 
-export default SignUp
+SignUp.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+
+export default withStyles(styles)(SignUp);

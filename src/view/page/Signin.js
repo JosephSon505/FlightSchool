@@ -72,7 +72,8 @@ class SignIn extends React.Component {
                             id='email' 
                             name='email' 
                             type='email' 
-                            label='Email' 
+                            label='Email'
+                            variant='outlined' 
                             className={classes.textField} 
                             helperText={emailError}
                             error={emailError ? true : false}
@@ -84,7 +85,8 @@ class SignIn extends React.Component {
                             id='password' 
                             name='password' 
                             type='password' 
-                            label='Password' 
+                            label='Password'
+                            variant='outlined'  
                             className={classes.textField} 
                             helperText={passwordError}
                             error={passwordError ? true : false}
@@ -125,6 +127,7 @@ class SignIn extends React.Component {
         };
 
         axios.post('/login', userData).then(res => {
+            localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
             this.setState({
                 loading: false
             });
