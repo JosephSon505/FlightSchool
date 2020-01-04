@@ -13,8 +13,8 @@ class Team extends React.Component {
     } 
 
     componentDidMount() {
+        // get all users and then store in state
         axios.get('/users').then(res => {
-            console.log(res.data);
             this.setState({
                 users: res.data
             });
@@ -24,9 +24,7 @@ class Team extends React.Component {
     }
 
     render() {
-        let users = this.state.users ? (
-            this.state.users.map(user => <User user={user} />)
-        ) : <p>Loading ... </p>
+        let users = this.state.users ? ( this.state.users.map(user => <User user={user} key={user.userID}/>) ) : <p>Loading...</p>
 
         return (
             <div>

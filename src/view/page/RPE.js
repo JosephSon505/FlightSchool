@@ -1,6 +1,7 @@
-import React from 'react'
-import { Table, Jumbotron, Container } from 'reactstrap'
-import '../css/Home.css'
+import React from 'react';
+import Navbar from '../components/Navbar';
+import { Table, Jumbotron, Container } from 'reactstrap';
+import '../css/Home.css';
 
 class RPE extends React.Component {
 
@@ -11,7 +12,14 @@ class RPE extends React.Component {
     }
 
     render() {
-        return this.chart()
+        return (
+            <div>
+                <Navbar />
+                <div className='container'>
+                { this.chart() }
+                </div>
+            </div>
+        );
     }
 
     chart() {

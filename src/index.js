@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -14,6 +14,7 @@ import SignUp from './view/page/Signup';
 import Home from './view/page/Home';
 import Blocks from './view/page/Blocks';
 import Team from './view/page/Team';
+import RPE from './view/page/RPE';
 
 const theme = createMuiTheme({
     palette: {
@@ -38,11 +39,12 @@ const routing = (
         <div>
         <Router>
             <Switch>
-                <Route exact path="/" component={SignIn} />
-                <Route path="/signup" component={SignUp} />
-                <Route path="/home" component={Home} />
-                <Route path="/blocks" component={Blocks} />
-                <Route path="/team" component={Team} />
+                <Route exact path='/' component={SignIn} />
+                <Route path='/signup' component={SignUp} />
+                <Route path='/home' component={Home} />
+                <Route path='/blocks' component={Blocks} />
+                <Route path='/rpe' component={RPE} />
+                <Route path='/team' component={Team} />
                 <Route component={Notfound} />
             </Switch>
         </Router>

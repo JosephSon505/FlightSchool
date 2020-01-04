@@ -108,7 +108,7 @@ exports.login = (req, res) => {
         if(err.code === 'auth/wrong-password') {
             return res.status(403).json({ general: 'Incorrect password, Please try again'});
         } else {
-            return res.status(500).json({error: err.code});
+            return res.status(500).json({ general: err.code});
         }
     });
 };

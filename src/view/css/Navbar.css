@@ -1,3 +1,7 @@
 .nav-container {
     margin: auto;
 }
+
+.button:hover {
+    color: white;
+}
