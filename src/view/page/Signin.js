@@ -10,9 +10,14 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-// Axios Import
-import axios from 'axios';
+// redux imports
+import { connect } from 'react-redux';
+import { loginUser } from '../../redux/actions/userActions';
 
+// Axios Import
+// import axios from 'axios';
+
+// CSS imports
 import '../css/App.css'
 
 const styles = {
@@ -46,7 +51,6 @@ class SignIn extends React.Component {
         this.state = {
             email: '',
             password: '',
-            loading: false,
             errors: {},
             emailError: '',
             passwordError: ''
@@ -54,8 +58,8 @@ class SignIn extends React.Component {
     }
 
     render() {
-        const { classes } = this.props;
-        const { errors, emailError, passwordError, loading } = this.state;
+        const { classes, UI: { loading } } = this.props;
+        const { errors, emailError, passwordError } = this.state;
 
         return (
             <Grid container className={classes.form}>
@@ -115,31 +119,48 @@ class SignIn extends React.Component {
         );
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps.UI.errors);
+        if(nextProps.UI.errors) {
+            this.setState({
+                errors: nextProps.UI.errors
+            });
+
+            if(nextProps.UI.errors.errors && nextProps.UI.errors.errors.email) {
+                this.setState({
+                    emailError: nextProps.UI.errors.errors.email
+                })
+            } else {
+                this.setState({
+                    emailError: null
+                });
+            }
+
+            if(nextProps.UI.errors.errors && nextProps.UI.errors.errors.password) {
+                this.setState({
+                    passwordError: nextProps.UI.errors.errors.password
+                });
+            } else {
+                this.setState({
+                    passwordError: null
+                });
+            }
+        } else {
+            this.setState({
+                errors: null
+            });
+        }
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
-        this.setState({
-            loading: true
-        });
-
         const userData = {
             email: this.state.email,
             password: this.state.password
         };
 
-        axios.post('/login', userData).then(res => {
-            localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
-            this.setState({
-                loading: false
-            });
-            this.props.history.push('/home');
-        }).catch(err => {
-            this.setState({
-                errors: err.response.data,
-                emailError: err.response.data.errors ? err.response.data.errors.email : '',
-                passwordError: err.response.data.errors ? err.response.data.errors.password : '',
-                loading: false
-            });
-        })
+        // login via redux
+        this.props.loginUser(userData, this.props.history);        
     }
 
     handleChange = (event) => {
@@ -154,7 +175,20 @@ class SignIn extends React.Component {
 }
 
 SignIn.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    loginUser: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+    UI: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(SignIn);
+const mapStateToProps = (state) => ({
+    user: state.user,
+    UI: state.UI
+});
+
+const mapActionsToProps = {
+    loginUser
+}
+
+
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(SignIn));
