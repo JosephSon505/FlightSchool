@@ -15,6 +15,10 @@ module.exports = (req, res, next) => {
         return db.collection('Users').where('userId', '==', req.user.uid).limit(1).get();
     }).then(data => {
         req.user.handle = data.docs[0].data().handle;
+
+        if(data.docs[0].data().team) req.user.team = data.docs[0].data().team;
+        else req.user.team = 'no team';
+
         return next();
     }).catch(error => {
         console.error('Error while verifying token', error);

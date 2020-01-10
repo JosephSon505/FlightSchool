@@ -206,4 +206,31 @@ exports.getTeam = (req, res) => {
         console.error(err);
         return res.status(500).json({ error: err.code });
     });
-}
+};
+
+// get all users in the same team as the current user
+exports.getTeammates = (req, res) => {
+
+    let users = [];
+
+    db.collection('Users').where('team', '==', req.user.team).get().then((data) => {
+        data.forEach((doc) => {
+            users.push({
+                userID: doc.id,
+                firstName: doc.data().firstName,
+                lastName: doc.data().lastName,
+                email: doc.data().email,
+                liftInstagram: doc.data().liftInstagram,
+                mainInstagram: doc.data().mainInstagram,
+                imageUrl: doc.data().imageUrl,
+                handle: doc.data().handle,
+                team: doc.data().team
+            });
+        });
+
+        return res.json({ users })
+    }).catch(error => {
+        res.status(500).json({error: `Error getting all users in the same team`});
+        console.error("Error: " + error);    
+    });
+};
