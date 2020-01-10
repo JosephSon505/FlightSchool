@@ -1,10 +1,24 @@
+
+// imports
 import React from 'react'
 import Navbar from '../components/Navbar';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import User from '../components/User';
 
+// Material UI imports
+import Button from '@material-ui/core/Button';
+import withStyles from '@material-ui/core/styles/withStyles';
+
+// css
 import '../css/Home.css';
+
+const styles = {
+    button: {
+        margin: '40px auto 0px auto',
+        position: 'relative'
+    }
+}
 
 class Team extends React.Component {
 
@@ -12,19 +26,29 @@ class Team extends React.Component {
         users: null
     } 
 
+    constructor() {
+        super();
+        this.teamOptions = this.teamOptions.bind(this);
+    }
+
     componentDidMount() {
         // get all users on the same team and then store in state
         axios.get('/user/teammates').then(res => {
             this.setState({
                 users: res.data
-            });        
+            });
+            console.log(this.state.users)
         }).catch(err => {
             console.log(err);
         })
     }
 
     render() {
-        let users = this.state.users ? ( this.state.users.map(user => <User user={user} key={user.userID}/>) ) : <p>Loading...</p>
+
+        // load teammates, if not ask to join or create a team
+        let users = <p>Loading ... </p>
+        if(this.state.users && this.state.users.length) users = this.state.users.map(user => <User user={user} key={user.userID}/>);
+        else if(this.state.users && !this.state.length) users = this.teamOptions();
 
         return (
             <div>
@@ -43,7 +67,32 @@ class Team extends React.Component {
         )
     }
 
+    // give user the option to create a team or join a team
+    teamOptions() {
+        const { classes } = this.props;
+
+        return (
+            <div>
+                    <Button variant='contained' color='primary' onClick={this.joinTeam} className={classes.button} fullWidth>
+                        Join a team
+                    </Button>
+                    <Button variant='contained' color='secondary' onClick={this.createTeam} className={classes.button} fullWidth>
+                        Create a team
+                    </Button>
+            </div>
+        )
+    }
+
+    // join a team
+    joinTeam = (event) => {
+        console.log('join team');
+    }
+
+    // create a team
+    createTeam = (event) => {
+        console.log('create team');
+    }
 
 }
 
-export default Team
+export default withStyles(styles)(Team)

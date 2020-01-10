@@ -79,7 +79,7 @@ class Navbar extends Component {
                             onClose={this.handleClose}
                         >
                             <MenuItem component={Link} to='/user'>My Profile</MenuItem>
-                            <MenuItem onClick={console.log('should log out')}>Logout</MenuItem>
+                            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                         </Menu>
                     </section>
                 </Toolbar>
@@ -105,6 +105,10 @@ class Navbar extends Component {
             training: null
         })
     };
+
+    handleLogout = (event) => {
+        console.log('User should be logged out now');
+    }
 }
 
 export default withStyles(styles)(Navbar)
