@@ -186,3 +186,24 @@ exports.uploadImage = (req, res) => {
 
     busboy.end(req.rawBody);
 };
+
+// update team for user
+exports.updateTeam = (req, res) => {
+    db.doc(`/Users/${req.user.handle}`).update({ team: req.body.team }).then(() => {
+        return res.json({ message: 'Team updated successfully' });
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).json({ error: err.code });
+    });
+};
+
+// get team for current user
+exports.getTeam = (req, res) => {
+    db.collection('Users').where('userId', '==', req.user.uid).limit(1).get().then(data => {
+        if(data.docs[0].data().team) return res.json({ team: data.docs[0].data().team });
+        else return res.json({ team: 'No team found' });
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).json({ error: err.code });
+    });
+}
