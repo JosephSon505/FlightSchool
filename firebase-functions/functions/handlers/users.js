@@ -228,7 +228,7 @@ exports.getTeammates = (req, res) => {
             });
         });
 
-        return res.json({ users })
+        return res.json(users);
     }).catch(error => {
         res.status(500).json({error: `Error getting all users in the same team`});
         console.error("Error: " + error);    

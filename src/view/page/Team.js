@@ -13,11 +13,11 @@ class Team extends React.Component {
     } 
 
     componentDidMount() {
-        // get all users and then store in state
-        axios.get('/users').then(res => {
+        // get all users on the same team and then store in state
+        axios.get('/user/teammates').then(res => {
             this.setState({
                 users: res.data
-            });
+            });        
         }).catch(err => {
             console.log(err);
         })

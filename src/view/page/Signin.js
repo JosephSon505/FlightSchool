@@ -98,7 +98,7 @@ class SignIn extends React.Component {
                             onChange={this.handleChange} 
                             fullWidth
                         />
-                        {errors.general && (
+                        {errors && errors.general && (
                             <Typography variant='body2' className={classes.customError}>
                                 {errors.general}
                             </Typography>
