@@ -1,5 +1,4 @@
 import React from 'react'
-// import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 // Material UI Imports
@@ -13,9 +12,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 // redux imports
 import { connect } from 'react-redux';
 import { loginUser } from '../../redux/actions/userActions';
-
-// Axios Import
-// import axios from 'axios';
 
 // CSS imports
 import '../css/App.css'

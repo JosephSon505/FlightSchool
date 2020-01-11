@@ -29,6 +29,8 @@ class Team extends React.Component {
     constructor() {
         super();
         this.teamOptions = this.teamOptions.bind(this);
+        this.joinTeam = this.joinTeam.bind(this);
+        this.createTeam = this.createTeam.bind(this);
     }
 
     componentDidMount() {
@@ -86,13 +88,16 @@ class Team extends React.Component {
     // join a team
     joinTeam = (event) => {
         console.log('join team');
+
+        // TODO: should pop up a modal to ask what the team name is
     }
 
     // create a team
     createTeam = (event) => {
         console.log('create team');
-    }
 
+        // TODO: should pop up a modal to ask what to call the new team
+    }
 }
 
 export default withStyles(styles)(Team)
