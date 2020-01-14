@@ -62,7 +62,7 @@ class SignIn extends React.Component {
                 <Grid item sm/>
                 <Grid item sm>
                     <Typography variant="h2" className={classes.pageTitle}>
-                        Flight School
+                        Flight School Test Deployment
                     </Typography>
                     <Typography variant="h4" className={classes.pageTitle}>
                         Log In
