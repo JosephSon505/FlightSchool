@@ -9,6 +9,7 @@ import User from '../components/User';
 // Material UI imports
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
+import Modal from '@material-ui/core/Modal';
 
 // css
 import '../css/Home.css';
@@ -17,13 +18,25 @@ const styles = {
     button: {
         margin: '40px auto 0px auto',
         position: 'relative'
-    }
+    },
+    paper: {
+        position: 'absolute',
+        width: 400,
+        border: '2px solid #000',
+        backgroundColor: 'white',
+        padding: '20px',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)'
+    },
 }
 
 class Team extends React.Component {
 
     state = {
-        users: null
+        users: null,
+        joinOpen: false,
+        createOpen: false
     } 
 
     constructor() {
@@ -31,6 +44,8 @@ class Team extends React.Component {
         this.teamOptions = this.teamOptions.bind(this);
         this.joinTeam = this.joinTeam.bind(this);
         this.createTeam = this.createTeam.bind(this);
+        this.closeJoinModal = this.closeJoinModal.bind(this);
+        this.closeCreateModal = this.closeCreateModal.bind(this);
     }
 
     componentDidMount() {
@@ -46,6 +61,7 @@ class Team extends React.Component {
     }
 
     render() {
+        const { classes } = this.props;
 
         // load teammates, if not ask to join or create a team
         let users = <p>Loading ... </p>
@@ -55,16 +71,44 @@ class Team extends React.Component {
         return (
             <div>
                 <Navbar />
-                    <div className='container'>
-                    <Grid container spacing={10}>
-                        <Grid item sm={8} xs={12}>
-                            {users}
-                        </Grid>
-                        <Grid item sm={4} xs={12}>
-                            <p>Content...</p>
-                        </Grid>
+                <div className='container'>
+                <Grid container spacing={10}>
+                    <Grid item sm={8} xs={12}>
+                        {users}
                     </Grid>
+                    <Grid item sm={4} xs={12}>
+                        <p>Content...</p>
+                    </Grid>
+                </Grid>
+                </div>
+
+                <Modal
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    open={ this.state.joinOpen }
+                    onClose={ this.closeJoinModal }
+                >
+                    <div className={classes.paper}>
+                        <h2 id="simple-modal-title">Join a Team</h2>
+                        <p id="simple-modal-description">
+                            Form to join a team goes here
+                        </p>
                     </div>
+                </Modal>
+
+                <Modal
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    open={ this.state.createOpen }
+                    onClose={ this.closeCreateModal }
+                >
+                    <div className={classes.paper}>
+                        <h2 id="simple-modal-title">Create a Team</h2>
+                        <p id="simple-modal-description">
+                            Form to create a team goes here
+                        </p>
+                    </div>
+                </Modal>
             </div>
         )
     }
@@ -75,12 +119,12 @@ class Team extends React.Component {
 
         return (
             <div>
-                    <Button variant='contained' color='primary' onClick={this.joinTeam} className={classes.button} fullWidth>
-                        Join a team
-                    </Button>
-                    <Button variant='contained' color='secondary' onClick={this.createTeam} className={classes.button} fullWidth>
-                        Create a team
-                    </Button>
+                <Button variant='contained' color='primary' onClick={this.joinTeam} className={classes.button} fullWidth>
+                    Join a team
+                </Button>
+                <Button variant='contained' color='secondary' onClick={this.createTeam} className={classes.button} fullWidth>
+                    Create a team
+                </Button>
             </div>
         )
     }
@@ -90,6 +134,9 @@ class Team extends React.Component {
         console.log('join team');
 
         // TODO: should pop up a modal to ask what the team name is
+        this.setState({
+            joinOpen: true
+        });
     }
 
     // create a team
@@ -97,6 +144,21 @@ class Team extends React.Component {
         console.log('create team');
 
         // TODO: should pop up a modal to ask what to call the new team
+        this.setState({
+            createOpen: true
+        })
+    }
+
+    closeJoinModal() {
+        this.setState({
+            joinOpen: false
+        });
+    }
+
+    closeCreateModal() {
+        this.setState({
+            createOpen: false
+        });
     }
 }
 
